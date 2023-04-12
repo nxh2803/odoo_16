@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+<!--        <report-->
+<!--            id="equipment_print_qr_code"-->
+<!--            model="maintenance.equipment"-->
+<!--            string="In mã QR"-->
+<!--            name="maintenance_custom.print_qr_code"-->
+<!--            file="maintenance_custom.print_qr_code"-->
+<!--            print_report_name="Mã QR"-->
+<!--            report_type="qweb-pdf"-->
+<!--        />-->
+
+        <template id="print_qr_code">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <t t-foreach="docs" t-as="equipment">
+                        <div class="col-xs-6">
+                            <table style="width:275pt; height:170pt; border: 1pt solid black; border-collapse:separate; border-radius:8pt; padding:10pt; margin:5pt">
+                                <td style="width:33%;" valign="center">
+                                    <table style="width:81pt; height:155pt; margin:5pt;">
+                                        <tr style="height:30%;">
+                                            <td align="center" valign="center">
+                                                <img t-if="equipment.company_id and equipment.company_id.logo" t-att-src="'data:image/png;base64,%s' % to_text(equipment.company_id.logo)" style="max-width:90%" alt="Logo Công ty"/>
+                                            </td>
+                                        </tr>
+                                        <tr style="height:70%;">
+                                            <td align="center" valign="center">
+                                                <img t-if="equipment.qr_code_img" t-att-src="'data:image/png;base64,%s' % to_text(equipment.qr_code_img)" style="max-width:90%;"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="width:67%" valign="center">
+                                    <span style="font:18px lucida-console,sans-serif !important;" t-field="equipment.name"/><br/>
+                                    <span style="font:12px lucida-console,sans-serif; white-space:nowrap;" t-field="equipment.serial_no"></span>
+                                    <span style="font:12px lucida-console,sans-serif; white-space:nowrap;" t-field="equipment.model"></span>
+                                    <span style="font:25px lucida-console,sans-serif; white-space:nowrap;" t-field="equipment.code"></span><br/><br/>
+                                    <span style="font:18px lucida-console,sans-serif; white-space:nowrap;" t-field="equipment.so_khung"/>
+                                </td>
+                            </table>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </template>
+        <record id="action_equipment_print_qr_code" model="ir.actions.report">
+                <field name="name">In mã QR (PDF)</field>
+                <field name="model">maintenance.equipment</field>
+                <field name="report_type">qweb-pdf</field>
+                <field name="report_name">maintenance_custom.print_qr_code</field>
+                <field name="report_file">maintenance_custom.print_qr_code</field>
+                <field name="print_report_name">'QR - %s' % object.name</field>
+                <field name="binding_model_id" ref="model_maintenance_equipment"/>
+                <field name="binding_type">report</field>
+            </record>
+    </data>
+</odoo>

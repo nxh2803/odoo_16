@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="stock.stock_location_comp_rule" model="ir.rule">
+            <field name="perm_read" eval="False"/>
+        </record>
+        <record id="maintenance.maintenance_team_comp_rule" model="ir.rule">
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+
+        <record id="vpicktree_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.view.tree.inherited</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='picking_type_id']" position="after">
+                    <field name="picking_type_code"/>
+                </xpath>
+                <xpath expr="//field[@name='location_id']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='location_dest_id']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='scheduled_date']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+<!--                <xpath expr="//field[@name='location_id']" position="replace">-->
+<!--                    <field name="location_id" options="{'no_create': True}"-->
+<!--                           invisible="context.get('invisible_in', False)"-->
+<!--                           string="Từ" groups="stock.group_stock_multi_locations" optional="show"/>-->
+<!--                </xpath>-->
+<!--                <xpath expr="//field[@name='location_dest_id']" position="replace">-->
+<!--                    <field name="location_dest_id" options="{'no_create': True}" string="Tới"-->
+<!--                           invisible="context.get('invisible_out', False)"-->
+<!--                           groups="stock.group_stock_multi_locations" optional="show"/>-->
+<!--                </xpath>-->
+                <xpath expr="//field[@name='location_dest_id']" position="after">
+                    <field name="scheduled_date"/>
+                </xpath>
+                 <xpath expr="//field[@name='scheduled_date']" position="attributes">
+                    <attribute name="string">Ngày thực hiện</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock.product_template_action_product" model="ir.actions.act_window">
+            <field name="view_mode">tree,kanban,form</field>
+        </record>
+
+        <record id="view_picking_form_inherit" model="ir.ui.view">
+            <field name="name">stock.picking.view.form.inherited</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='move_ids_without_package']/tree/field[@name='product_id']" position="after">
+                    <field name="default_code"/>
+                    <field name="categ_id"/>
+                    <field name="uom_id"/>
+                    <field name="equipment"/>
+                    <field name="qty_available" sum="Tổng"/>
+                </xpath>
+                <xpath expr="//field[@name='name']" position="replace">
+                    <field name="name" readonly="0" placeholder="Tên phiếu"/>
+                    <field name="picking_type_code" invisible="1"/>
+                </xpath>
+<!--                <xpath expr="//field[@name='origin']" position="after">-->
+<!--                    <field name="equipment" string="Dùng cho" attrs="{'invisible':[('picking_type_code','!=','outgoing')]}"/>-->
+<!--                </xpath>-->
+                <xpath expr="//field[@name='quantity_done']" position="attributes">
+                      <attribute name="string">Số lượng</attribute>
+                     <attribute name="sum">Tổng</attribute>
+                </xpath>
+                <xpath expr="//label[@for='scheduled_date']" position="attributes">
+                    <attribute name="string">Ngày thực hiện</attribute>
+                </xpath>
+                <xpath expr="//field[@name='date_done']" position="replace">
+                    <field name="date_done" string="Effective Date" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_stock_move_line_detailed_operation_tree_inherit_ciec" model="ir.ui.view">
+            <field name="name">stock.move.line.view.tree.inherited</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock.view_stock_move_line_detailed_operation_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="default_code"/>
+                    <field name="categ_id"/>
+                    <field name="uom_id"/>
+                    <field name="equipment"
+                           attrs="{'column_invisible': [('parent.picking_type_code', '=', 'outgoing')]}"/>
+                    <field name="equipment_picking"
+                           attrs="{'column_invisible': [('parent.picking_type_code', '=', 'incoming')]}"/>
+                    <field name="qty_available" sum="Tổng"/>
+                </xpath>
+                <xpath expr="//field[@name='location_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='location_dest_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                  <xpath expr="//field[@name='qty_done']" position="attributes">
+                      <attribute name="string">Số lượng</attribute>
+                      <attribute name="sum">Tổng</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

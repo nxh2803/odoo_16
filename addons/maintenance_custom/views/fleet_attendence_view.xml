@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="fleet_attendence_tree_view" model="ir.ui.view">
+        <field name="name">fleet.attendence.tree.view</field>
+        <field name="model">fleet.attendence</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="user_id"/>
+                <field name="location_id"/>
+                <field name="location_dest_id"/>
+                <field name="equipment_id"/>
+                <field name="date_process"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="odometer_start"/>
+                <field name="odometer_end"/>
+
+                <field name="state" optional="show" widget="badge" decoration-success="state == '3_done'"
+                       decoration-info="state != '3_done'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="fleet_attendence_form_view" model="ir.ui.view">
+        <field name="name">fleet.attendence.form.view</field>
+        <field name="model">fleet.attendence</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button type="object" name="do_start_trip" string="Bắt đầu"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('state','!=','1_draft')]}"/>
+                    <button type="object" name="do_end_trip" string="Kết thúc"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('state','!=','2_confirm')]}"/>
+                    <field name="state" widget="statusbar" statusbar_visible="1_draft,2_confirm,3_done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="equipment_id"/>
+                            <field name="location_id"/>
+                            <field name="location_dest_id"/>
+                            <field name="google_map" widget="url"/>
+
+                        </group>
+                        <group>
+                            <field name="date_process"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="odometer_start"/>
+                            <field name="odometer_end"/>
+                        </group>
+                        <field name="note" nolabel="1" placeholder="Ghi chú"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="fleet_attendence_search_view" model="ir.ui.view">
+        <field name="name">fleet.attendence.view.search</field>
+        <field name="model">fleet.attendence</field>
+        <field name="arch" type="xml">
+            <search string="Tìm kiếm">
+                <field name="equipment_id"/>
+                <field name="location_id"/>
+                <field name="location_dest_id"/>
+                <separator/>
+                <filter name="today" string="Hôm nay" separator="1"
+                        domain="[('date_process','&lt;=', (datetime.date.today()).strftime('%Y-%m-%d')),
+                        ('date_process','&gt;=',(datetime.date.today()).strftime('%Y-%m-%d'))]"/>
+                <filter string="Tuần này" name="week"
+                        domain="[('date_process','&lt;=', (context_today() + relativedelta(weeks=0,day=7, weekday=-1)).strftime('%Y-%m-%d')),
+                        ('date_process','&gt;=',(context_today() - relativedelta(weeks=1, weekday=0)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Tuần trước" name="last_week"
+                        domain="[('date_process', '&gt;=', ((context_today()+relativedelta(weeks=-2, days=1, weekday=0)).strftime('%Y-%m-%d'))),
+                        ('date_process', '&lt;=', ((context_today()+relativedelta(weeks=-1,weekday=6)).strftime('%Y-%m-%d')))]"/>
+                <filter name="month" string="Tháng này"
+                        domain="['&amp;',('date_process','&gt;=',(context_today()+relativedelta(day=1)).strftime('%Y-%m-%d')),
+                        ('date_process','&lt;=',(context_today()+relativedelta(months=1,day=1,days=-1)).strftime('%Y-%m-%d'))]"/>
+                <filter name="prev_month" string="Tháng trước"
+                        domain="[('date_process','&gt;=',(context_today()-relativedelta(months=1)).strftime('%Y-%m-01')),
+                        ('date_process','&lt;',context_today().strftime('%Y-%m-01'))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Ngày thực hiện" name="group_date_process" context="{'group_by': 'date_process:day'}"/>
+                    <filter string="Trạng thái chuyến đi" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="fleet_attendence_action" model="ir.actions.act_window">
+        <field name="name">Điểm danh</field>
+        <field name="res_model">fleet.attendence</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="fleet_attendence_menu"
+              name="Điểm danh"
+              parent="menu_maintenance_title_attendence"
+              action="fleet_attendence_action"
+              sequence="5"/>
+</odoo>

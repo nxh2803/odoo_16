@@ -1,0 +1,21 @@
+{
+    'name': 'Maintenance Custom',
+    'summary': 'Maintenance Custom',
+    'description': 'Maintenance Custom',
+    'category': 'Maintenance',
+    'version': '14.0.1.0.0',
+    'depends': ['hr_maintenance', 'hr', 'stock', 'fleet', 'vn_address', 'ir_attachment_url'],
+    'data': [
+        'data/ir_sequence_data.xml',
+        'security/ir.model.access.csv',
+        'views/menu.xml',
+        'views/maintenance_view.xml',
+        'views/product_view.xml',
+        'views/fleet_vehicle_view.xml',
+        'views/stock_picking_view.xml',
+        'views/multicompany_transfer_view.xml',
+        'views/fleet_attendence_view.xml',
+        'report/equipment_qr.xml',
+    ],
+    'application': True,
+}

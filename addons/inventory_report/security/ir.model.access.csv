@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_inventory_report_wizard,inventory.report.wizard,model_inventory_report_wizard,base.group_user,1,1,1,1
+access_inventory_report_group_user_all,inventory_report_group_user_all,model_inventory_report,,1,1,1,1

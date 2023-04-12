@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fleet_vehicle_view_form_inherited" model="ir.ui.view">
+        <field name="name">fleet.vehicle.view.form.inherited</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/group[last()]" position="after">
+                <group string="Thiết bị">
+                    <field name="equipment_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="equipment_location_tree_view" model="ir.ui.view">
+        <field name="name">equipment.location.tree.view</field>
+        <field name="model">equipment.location</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="district_id"/>
+                <field name="ward_id"/>
+                <field name="state_id"/>
+                <field name="country_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="equipment_location_form_view" model="ir.ui.view">
+        <field name="name">equipment.location.form.view</field>
+        <field name="model">equipment.location</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="district_id"/>
+                            <field name="ward_id"/>
+                        </group>
+                        <group>
+                            <field name="state_id"/>
+                            <field name="country_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+     <record id="equipment_location_action" model="ir.actions.act_window">
+        <field name="name">Vị Trí</field>
+        <field name="res_model">equipment.location</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="equipment_location_menu"
+              name="Vị Trí"
+              parent="menu_maintenance_title_attendence"
+              action="equipment_location_action"
+              sequence="10"/>
+</odoo>

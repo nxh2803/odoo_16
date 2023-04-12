@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="assets_backend" name="maintenance_custom assets" inherit_id="web.assets_backend">
+             <xpath expr="." position="inside">
+                 <link rel="stylesheet" href="/maintenance_custom/static/src/css/maintenance.css"/>
+             </xpath>
+         </template>
+    </data>
+
+    <record id="stock_picking_action_in" model="ir.actions.server">
+        <field name="name">Stock Picking</field>
+        <field name="model_id" ref="maintenance_custom.model_stock_picking"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.action_return_in_picking()
+        </field>
+    </record>
+
+    <record id="stock_picking_action_out" model="ir.actions.server">
+        <field name="name">Stock Picking</field>
+        <field name="model_id" ref="maintenance_custom.model_stock_picking"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.action_return_out_picking()
+        </field>
+    </record>
+
+     <record id="product_product_in_picking_action" model="ir.actions.server">
+        <field name="name">Product</field>
+        <field name="model_id" ref="maintenance_custom.model_product_product"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = model.action_return_product_in_picking()
+        </field>
+    </record>
+
+    <menuitem id="menu_stock_action_group"
+              name="Điều chuyển hàng"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="1"/>
+
+        <menuitem id="menu_stock_action_in"
+            name="Nhập kho"
+            parent="menu_stock_action_group"
+            action="stock_picking_action_in"
+            sequence="10"/>
+
+        <menuitem id="menu_stock_action_out"
+            name="Xuất kho"
+            parent="menu_stock_action_group"
+            action="stock_picking_action_out"
+            sequence="30"/>
+
+        <menuitem id="menu_product_product_in_picking_action"
+            name="Tồn"
+            parent="menu_stock_action_group"
+            action="product_product_in_picking_action"
+            sequence="40"/>
+
+    <delete model="ir.ui.menu" id="stock.stock_picking_type_menu" />
+    <menuitem id="stock.all_picking" name="Tất cả hoạt động" parent="menu_stock_action_group"
+              sequence="50" action="stock.action_picking_tree_all" groups="stock.group_stock_manager,stock.group_stock_user"/>
+
+    <record id="stock.menu_forecast_inventory" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <menuitem id="menu_maintenance_title_attendence"
+            name="Điểm danh"
+            parent="maintenance.menu_maintenance_title"
+            sequence="40"/>
+
+</odoo>

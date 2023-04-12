@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="maintenance_request_form_view_inherited" model="ir.ui.view">
+        <field name="name">maintenance_request_form.view.inherited</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='maintenance_type']" position="after">
+                <field name="date_process"/>
+                <field name="performer_id"/>
+                <field name="machine_running_time" string="Giờ máy"/>
+
+            </xpath>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="equipment_id"/>
+                <field name="note"/>
+            </xpath>
+        </field>
+    </record>
+
+     <record id="maintenance_request_kanban_view_inherited" model="ir.ui.view">
+        <field name="name">maintenance_request_kanban.view.inherited</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_kanban_record_body')]" position="inside">
+                <span class="" t-if="record.note.raw_value">
+                    <strong>Mô tả: </strong><field name="note"/><br/>
+                </span>
+                <span class="" t-if="record.date_process.raw_value">
+                    <strong>Ngày thực hiện: </strong><field name="date_process"/><br/>
+                </span>
+                <span class="" t-if="record.performer_id.raw_value">
+                    <strong>Người thực hiện: </strong><field name="performer_id"/><br/>
+                </span>
+                <span class="" t-if="record.machine_running_time.raw_value">
+                    <strong>Giờ máy: </strong><field name="machine_running_time"/><br/>
+                </span>
+            </xpath>
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="default_order">date_process desc, write_date desc</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_equipment_view_form_inherited" model="ir.ui.view">
+        <field name="name">maintenance.equipment.view.inherited</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='warranty_date']" position="after">
+                <field name="code"/>
+                <field name="so_khung"/>
+            </xpath>
+             <xpath expr="//div[hasclass('oe_title')]" position="before">
+                 <field name="qr_code" invisible="1"/>
+                <field name="qr_code_img" widget="image" class="oe_avatar"/>
+            </xpath>
+             <xpath expr="//group[@name='maintenance']" position="after">
+                 <group name="maintenance_date">
+                     <field name="last_request"/>
+                     <field name="machine_running_time"/>
+                     <field name="machine_attendence_time" string="Giờ điểm danh cuối"/>
+                 </group>
+             </xpath>
+            <xpath expr="//field[@name='location']" position="replace">
+                <field name="location_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_equipment_request_view_tree_inherited" model="ir.ui.view">
+        <field name="name">maintenance.request.tree.view.inherited</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="note"/>
+                <field name="date_process"/>
+                <field name="performer_id"/>
+                <field name="machine_running_time"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+             <xpath expr="//field[@name='category_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="maintenance_equipment_view_kanban_inherit_hr_inherited" model="ir.ui.view">
+        <field name="name">hr.maintenance.equipment.view.inherited</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="hr_maintenance.maintenance_equipment_view_kanban_inherit_hr"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@t-if='!record.employee_id.raw_value']" position="replace">
+            </xpath>
+        </field>
+    </record>
+
+     <record id="hr_equipment_view_kanban_inherited" model="ir.ui.view">
+        <field name="name">maintenance.equipment.kanban.view.inherited</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_kanban_record_body')]" position="replace">
+                <div class="o_kanban_record_body">
+                    <span><strong>Mã số: </strong><span t-if="record.code.raw_value"><field name="code"/></span></span>
+                    <br/>
+                    <span><strong>Số khung: </strong><span t-if="record.so_khung.raw_value"><field name="so_khung"/></span></span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_equipment_view_tree_inherited" model="ir.ui.view">
+        <field name="name">hr.maintenance.equipment.view.inherited</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='serial_no']" position="before">
+                <field name="code"/>
+                <field name="so_khung"/>
+                <field name="machine_running_time"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
